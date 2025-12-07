@@ -25,12 +25,9 @@
     </style>
 </head>
 
-<body class="bg-gray-50 text-[#333333] font-['Poppins']">
+<body class="bg-gray-50 text-[#333333]">
 
-    {{-- 2. Header Partial --}}
-    <div class="bg-[#0d85c8]">
-        @include('partials.header')
-    </div>
+  @include('layout.partials.landing.header')
 
     <main x-data="layananApp()">
         
@@ -47,7 +44,7 @@
                     <span class="mx-2">/</span>
                     <span class="text-white">Layanan Publik</span>
                 </nav>
-                <h1 class="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">
+                <h1 class="text-3xl md:text-5xl text-white font-bold mb-4 drop-shadow-lg">
                     Daftar Layanan & Regulasi
                 </h1>
                 <p class="text-gray-200 text-lg max-w-2xl font-light">
@@ -167,7 +164,7 @@
     </main>
 
     {{-- 5. Footer Partial --}}
-    @include('partials.footer')
+    @include('layout.partials.landing.footer')
 
     {{-- JS Scripts --}}
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

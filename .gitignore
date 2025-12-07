@@ -2,7 +2,11 @@
 /public/build
 /public/hot
 /public/storage
-
+/public/assets/css
+/public/assets/js
+/public/assets/media
+/public/assets/plugins
+/public/assets/resources
 /public/mix-manifest.json
 /storage/*.key
 /vendor

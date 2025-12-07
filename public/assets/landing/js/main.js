@@ -9,8 +9,7 @@ window.addEventListener("scroll", () => {
     navbar.classList.add("nav-transparent");
   }
 });
-//anim
-// 1. Update renderServices
+
 function renderServices() {
   const container = document.getElementById("services-container");
   const html = appModel.services
@@ -31,125 +30,170 @@ function renderServices() {
   container.innerHTML = html;
 }
 
-// function renderNewsOPD() {
-//   const container = document.getElementById("news-opd-container");
-//   const html = appModel.newsOPD
-//     .map(
-//       (item, index) => `
-//             <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden border border-gray-100" data-aos="fade-up" data-aos-delay="${index * 100}">
-//                 <div class="h-32 bg-gray-200">
-//                       <img src="${item.img}" class="w-full h-full object-cover">
-//                 </div>
-//                 <div class="p-4">
-//                     <div class="flex justify-between text-xs text-gray-400 mb-2">
-//                         <span>${item.date}</span>
-//                         <span>${item.author}</span>
-//                     </div>
-//                     <h4 class="font-bold font-serif-custom text-gray-800 text-sm line-clamp-2">${item.title}</h4>
-//                 </div>
-//             </div>
-//         `
-//     )
-//     .join("");
-//   container.innerHTML = html;
-// }
+//hamburger
+document.addEventListener("DOMContentLoaded", function() {
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('mobile-menu');
+    
+    //elemen icon dalam tombol
+    const iconHamburger = document.getElementById('icon-hamburger');
+    const iconClose = document.getElementById('icon-close');
 
-// // 3. Update renderDistrictNews
-// function renderDistrictNews() {
-//   const container = document.getElementById("news-district-container");
-//   const html = appModel.newsDistrict
-//     .map(
-//       (item, index) => `
-//             <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group" data-aos="fade-up" data-aos-delay="${index * 100}">
-//                 <div class="h-48 overflow-hidden">
-//                     <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-//                 </div>
-//                 <div class="p-6 relative">
-//                     <span class="absolute -top-3 left-6 bg-blue-500 text-white text-xs px-3 py-1 rounded shadow-sm">
-//                         ${item.category}
-//                     </span>
-//                     <h3 class="font-bold text-lg font-serif-custom mb-2 mt-2">${item.title}</h3>
-//                     <div class="flex items-center gap-2 text-xs text-gray-400 mt-4">
-//                         <i class="ph ph-calendar"></i>
-//                         <span>${item.date}</span>
-//                     </div>
-//                 </div>
-//             </div>
-//         `
-//     )
-//     .join("");
-//   container.innerHTML = html;
-// }
+    if (!btn || !menu) return;
+
+    btn.addEventListener('click', () => {
+      //cek menu sedang terbuka (berdasarkan max-height)
+      const isOpen = menu.style.maxHeight && menu.style.maxHeight !== '0px';
+
+      if (isOpen) {
+        // TUGAS: MENUTUP MENU
+        menu.style.maxHeight = '0px';
+        menu.style.opacity = '0';
+        menu.classList.add('invisible');
+        
+        //ganti Icon X kembali ke hamburger
+        iconClose.classList.add('hidden');
+        iconHamburger.classList.remove('hidden');
+        iconHamburger.classList.remove('rotate-90');
+        
+      } else {
+        // TUGAS: MEMBUKA MENU
+        menu.classList.remove('invisible');
+        menu.style.maxHeight = menu.scrollHeight + "px";
+        menu.style.opacity = '1';
+        
+        //hamburger menjadi X
+        iconHamburger.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+        iconClose.classList.remove('rotate-90'); 
+      }
+    });
+
+    //reset saat layar di-resize ke desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        menu.style.maxHeight = '0px';
+        menu.style.opacity = '0';
+        menu.classList.add('invisible');
+        
+        //kembalikan ke icon hamburger
+        iconClose.classList.add('hidden');
+        iconHamburger.classList.remove('hidden');
+      }
+    });
+  });
+//hamburger ends
+
+//helper untuk toggle dropdown mobile
+  function setupMobileDropdown(btnId, menuId, iconId) {
+    const btn = document.getElementById(btnId);
+    const menu = document.getElementById(menuId);
+    const icon = document.getElementById(iconId);
+    const mainMobileMenu = document.getElementById('mobile-menu'); 
+
+    if (!btn || !menu || !icon) return;
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      const isOpen = menu.style.maxHeight && menu.style.maxHeight !== '0px';
+      
+      //hitung tinggi submenu yang akan dibuka
+      const contentHeight = menu.scrollHeight; 
+
+      if (isOpen) {
+        // --- TUTUP ---
+        menu.style.maxHeight = '0px';
+        icon.classList.remove('rotate-180');
+
+      } else {
+        // --- BUKA ---
+        menu.style.maxHeight = contentHeight + "px";
+        icon.classList.add('rotate-180');
+
+        if (mainMobileMenu.style.maxHeight !== '0px') {
+           const currentMainHeight = mainMobileMenu.scrollHeight;
+           mainMobileMenu.style.maxHeight = (currentMainHeight + contentHeight) + "px";
+        }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    //jalankan setup
+    setupMobileDropdown('mobile-profil-btn', 'mobile-profil-menu', 'mobile-profil-icon');
+    setupMobileDropdown('mobile-link-btn', 'mobile-link-menu', 'mobile-link-icon');
+  });
 
 const appModel = {
   services: [{
-    title: "Perubahan Alamat KK",
-    subtitle: "Pengajuan cetak KK dikarenakan perubahan alamat di dalam lingkup KABUPATEN LUMAJANG",
-    date: "Jan - Apr 2025",
-    link: "#",
-  },
-  {
-    title: "Cetak Kartu Keluarga",
-    subtitle: "Pengajuan cetak KK dikarenakan perubahan alamat di dalam lingkup KABUPATEN LUMAJANG",
-    date: "Jan - Apr 2025",
-    link: "#",
-  },
-  {
-    title: "Cetak KIA",
-    subtitle: "Pengajuan cetak KK dikarenakan perubahan alamat di dalam lingkup KABUPATEN LUMAJANG",
-    date: "Jan - Apr 2025",
-    link: "#",
-  },
-  {
-    title: "Cetak KIA",
-    subtitle: "Pengajuan cetak KK dikarenakan perubahan alamat di dalam lingkup KABUPATEN LUMAJANG",
-    date: "Jan - Apr 2025",
-    link: "#",
-  },
+      title: "Pelayanan Infomarsi Publik",
+      subtitle: "Layanan permohonan informasi dan dokumentasi publik secara transparan sesuai UU KIP",
+      date: "Jan - Apr 2025",
+      link: "https://diskominfo.lumajangkab.go.id/layanan/detail/1226",
+    },
+    {
+      title: "Pelayanan Internet Terpadu",
+      subtitle: "Penyediaan dan pengelolaan akses infrastruktur jaringan internet untuk instansi pemerintah dan fasilitas publik",
+      date: "Jan - Apr 2025",
+      link: "https://diskominfo.lumajangkab.go.id/layanan/detail/1229",
+    },
+    {
+      title: "Pelayanan Pengaduan Publik",
+      subtitle: "Sampaikan aspirasi, kritik, dan laporan terkait kinerja pelayanan publik",
+      date: "Jan - Apr 2025",
+      link: "https://diskominfo.lumajangkab.go.id/layanan/detail/1228",
+    },
+    {
+      title: "Pelayanan Portal Satu Data",
+      subtitle: "Pusat integrasi data statistik sektoral yang akurat dan terbuka untuk mendukung pembangunan daerah",
+      date: "Jan - Apr 2025",
+      link: "https://diskominfo.lumajangkab.go.id/layanan/detail/1227",
+    },
   ],
   newsOPD: [{
-    title: "Rapat Koordinasi SPBE",
-    date: "12 Nov 2023",
-    author: "Admin",
-    img: "https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?w=500&auto=format&fit=crop",
-  },
-  {
-    title: "Sosialisasi Keamanan Informasi",
-    date: "10 Nov 2023",
-    author: "Humas",
-    img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&auto=format&fit=crop",
-  },
-  {
-    title: "Pelatihan Digital Marketing UMKM",
-    date: "08 Nov 2023",
-    author: "Ekonomi",
-    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=500&auto=format&fit=crop",
-  },
-  {
-    title: "Kunjungan Kerja Kemenkominfo",
-    date: "05 Nov 2023",
-    author: "Admin",
-    img: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&auto=format&fit=crop",
-  },
+      title: "Rapat Koordinasi SPBE",
+      date: "12 Nov 2023",
+      author: "Admin",
+      img: "https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?w=500&auto=format&fit=crop",
+    },
+    {
+      title: "Sosialisasi Keamanan Informasi",
+      date: "10 Nov 2023",
+      author: "Humas",
+      img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&auto=format&fit=crop",
+    },
+    {
+      title: "Pelatihan Digital Marketing UMKM",
+      date: "08 Nov 2023",
+      author: "Ekonomi",
+      img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=500&auto=format&fit=crop",
+    },
+    {
+      title: "Kunjungan Kerja Kemenkominfo",
+      date: "05 Nov 2023",
+      author: "Admin",
+      img: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&auto=format&fit=crop",
+    },
   ],
   newsDistrict: [{
-    title: "Pemerintah Luncurkan Aplikasi Baru",
-    date: "18 Nov 2023",
-    category: "Teknologi",
-    img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop",
-  },
-  {
-    title: "Bupati Tinjau Pembangunan Infrastruktur",
-    date: "17 Nov 2023",
-    category: "Pembangunan",
-    img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500&auto=format&fit=crop",
-  },
-  {
-    title: "Festival Budaya Lumajang 2023",
-    date: "15 Nov 2023",
-    category: "Budaya",
-    img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=500&auto=format&fit=crop",
-  },
+      title: "Pemerintah Luncurkan Aplikasi Baru",
+      date: "18 Nov 2023",
+      category: "Teknologi",
+      img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop",
+    },
+    {
+      title: "Bupati Tinjau Pembangunan Infrastruktur",
+      date: "17 Nov 2023",
+      category: "Pembangunan",
+      img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500&auto=format&fit=crop",
+    },
+    {
+      title: "Festival Budaya Lumajang 2023",
+      date: "15 Nov 2023",
+      category: "Budaya",
+      img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=500&auto=format&fit=crop",
+    },
   ],
   gallery: [
     "https://images.unsplash.com/photo-1606857521015-7f9fcf423740?w=500&auto=format&fit=crop",
@@ -160,38 +204,39 @@ const appModel = {
     "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&auto=format&fit=crop",
   ],
   announcements: [{
-    title: "Data Pemohon E-KTP Belum Diambil",
-    date: "07/11/2023",
-    type: "Kependudukan",
-  },
-  {
-    title: "Perbup Nomor 53 Tahun 2023",
-    date: "20/09/2023",
-    type: "Regulasi",
-  },
-  {
-    title: "Perubahan Jam Pelayanan Ramadhan",
-    date: "31/03/2022",
-    type: "Pelayanan",
-  },
-  {
-    title: "Undangan Ditjen Dukcapil",
-    date: "04/03/2022",
-    type: "Undangan",
-  },
-  {
-    title: "Sapa DP3AK Pengurusan KTP Pemula",
-    date: "01/03/2022",
-    type: "Sosialisasi",
-  },
-  {
-    title: "Undangan Dukcapil Menyapa",
-    date: "25/02/2022",
-    type: "Undangan",
-  },
+      title: "Data Pemohon E-KTP Belum Diambil",
+      date: "07/11/2023",
+      type: "Kependudukan",
+    },
+    {
+      title: "Perbup Nomor 53 Tahun 2023",
+      date: "20/09/2023",
+      type: "Regulasi",
+    },
+    {
+      title: "Perubahan Jam Pelayanan Ramadhan",
+      date: "31/03/2022",
+      type: "Pelayanan",
+    },
+    {
+      title: "Undangan Ditjen Dukcapil",
+      date: "04/03/2022",
+      type: "Undangan",
+    },
+    {
+      title: "Sapa DP3AK Pengurusan KTP Pemula",
+      date: "01/03/2022",
+      type: "Sosialisasi",
+    },
+    {
+      title: "Undangan Dukcapil Menyapa",
+      date: "25/02/2022",
+      type: "Undangan",
+    },
   ],
 };
 
+//detail layanan
 function layananApp() {
   return {
     activeCategory: 'Semua',
@@ -240,56 +285,6 @@ function layananApp() {
     }
   }
 }
-// const itemsPerSlide = 10;
-// function renderServices(page = 0) {
-//   const container = document.getElementById("services-container");
-//   // // const start = page * itemsPerSlide;
-//   // // const end = start + itemsPerSlide;
-//   // const itemsToShow = appModel.services.slice(start, end); 
-
-
-//   const html = itemsToShow
-//     .map(
-//       (item, index) => `
-//         <div class="w-full" data-aos="fade-up" data-aos-delay="${index * 100}">
-//             <div class="bg-white rounded-2xl shadow-xl p-8 hover:-translate-y-2 transition duration-300 h-full flex flex-col justify-between">
-//                 <div>
-//                     <p class="text-xs font-bold text-gray-400 mb-3">${item.date}</p>
-//                     <h3 class="text-xl font-bold text-blue-500 mb-3">${item.title}</h3>
-//                     <p class="text-sm text-gray-600 mb-6 leading-relaxed">${item.subtitle}</p>
-//                 </div>
-//                 <div class="text-right">
-//                      <a href="${item.link}" class="text-sm font-bold text-gray-400 hover:text-blue-500 transition">
-//                      Lihat Selengkapnya ></a>
-//                 </div>
-//             </div>
-//         </div>
-//         `
-//     )
-//     .join("");
-//   container.innerHTML = html;
-//   // updateDots(page);
-// }
-// document.querySelectorAll(".dot").forEach(dot => {
-//   dot.addEventListener("click", () => {
-//     const page = parseInt(dot.dataset.slide);
-//     renderServices(page);
-//   });
-// });
-
-// function updateDots(activePage) {
-//   const dots = document.querySelectorAll(".dot");
-
-//   dots.forEach(dot => {
-//     dot.classList.remove("bg-blue-500");
-//     dot.classList.add("bg-white/50");
-//   });
-
-//   const activeDot = document.querySelector(`.dot[data-slide="${activePage}"]`);
-//   activeDot.classList.remove("bg-white/50");
-//   activeDot.classList.add("bg-blue-500");
-// }
-
 
 function renderNewsOPD() {
   const container = document.getElementById("news-opd-container");
@@ -385,62 +380,20 @@ function toggleMobileMenu() {
   const menu = document.getElementById("mobile-menu");
   menu.classList.toggle("hidden");
 }
-// function ensureDots() {
-//   const dotContainer = document.getElementById("dots-container");
-//   const pages = Math.ceil(appModel.services.length / itemsPerSlide);
-
-//   if (dotContainer) {
-//     if (!dotContainer.querySelector(".dot")) {
-//       dotContainer.innerHTML = Array.from({ length: pages })
-//         .map((_, i) => `<span class="dot w-3 h-3 rounded-full cursor-pointer ${i === 0 ? 'bg-blue-500' : 'bg-white/50'}" data-slide="${i}"></span>`)
-//         .join("");
-//     }
-//   }
-// }
-
-// function bindDotHandlers() {
-//   document.querySelectorAll(".dot").forEach(dot => {
-//     const newDot = dot.cloneNode(true);
-//     dot.parentNode.replaceChild(newDot, dot);
-//   });
-
-//   document.querySelectorAll(".dot").forEach(dot => {
-//     dot.addEventListener("click", () => {
-//       const page = Number(dot.dataset.slide) || 0;
-//       renderServices(page);
-//       if (window.AOS) AOS.refresh();
-//     });
-//   });
-// }
-// dot.addEventListener("click", () => {
-//   const page = parseInt(dot.dataset.slide);
-//   renderServices(page);
-// });
-
 
 document.addEventListener("DOMContentLoaded", () => {
-  // ensureDots();
-  // bindDotHandlers();
   renderServices();
   renderNewsOPD();
   renderDistrictNews();
   renderGallery();
   renderAnnouncements();
   AOS.init({
-    once: true,
-    duration: 1000,
+    once: true, 
+    duration: 1000, 
   });
 });
 
-/**
-* Template Name: UpConstruction
-* Template URL: https://bootstrapmade.com/upconstruction-bootstrap-construction-website-template/
-* Updated: Aug 07 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
-(function () {
+(function() {
   "use strict";
 
   /**
@@ -484,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * Toggle mobile nav dropdowns
    */
   document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-    navmenu.addEventListener('click', function (e) {
+    navmenu.addEventListener('click', function(e) {
       e.preventDefault();
       this.parentNode.classList.toggle('active');
       this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
@@ -546,13 +499,13 @@ document.addEventListener("DOMContentLoaded", () => {
   /**
    * Init isotope layout and filters
    */
-  document.querySelectorAll('.isotope-layout').forEach(function (isotopeItem) {
+  document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
     let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
     let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
     let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
 
     let initIsotope;
-    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function () {
+    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function() {
       initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
         itemSelector: '.isotope-item',
         layoutMode: layout,
@@ -561,8 +514,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function (filters) {
-      filters.addEventListener('click', function () {
+    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function(filters) {
+      filters.addEventListener('click', function() {
         isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
         this.classList.add('filter-active');
         initIsotope.arrange({
@@ -580,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * Init swiper sliders
    */
   function initSwiper() {
-    document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
+    document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
       let config = JSON.parse(
         swiperElement.querySelector(".swiper-config").innerHTML.trim()
       );

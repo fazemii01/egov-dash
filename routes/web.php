@@ -29,10 +29,10 @@ use App\Http\Controllers\Apps\PermissionManagementController;
 */
 
 Route::get('/index', function () {
-    return view('/pages.landing.index');
+    return view('pages.landing.index');
 });
 Route::get('/layanan', function () {
-    return view('/pages.landing.layanan');
+    return view('pages.landing.layanan');
 });
 Route::get('/layanan', function () {
     return view('pages.landing.layanan'); 
@@ -40,6 +40,7 @@ Route::get('/layanan', function () {
 Route::get('/index', function () {
     return view('pages.landing.index'); 
 })->name('landing.index');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
